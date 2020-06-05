@@ -1,0 +1,18 @@
+{
+  "name": "school-band-check",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "input": "^1.0.1",
+    "node-cron": "^2.0.3",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  }
+}

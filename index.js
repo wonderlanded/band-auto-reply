@@ -1,9 +1,14 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 const input = require('input')
 const cron = require('node-cron')
 const { phone, password, bandID, replyTxt, onSuccess, usePush, webDriverServer } = require('./config');
 const webhook = require('./discordWebhook');
-let driver = new Builder().forBrowser('chrome').usingServer(webDriverServer).build();
+const screen = {
+    width: 640,
+    height: 480
+  };
+let driver = new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless().windowSize(screen)).usingServer(webDriverServer).build();
 (async function action() {
   
   let firstItem = ''

@@ -38,13 +38,22 @@ let driver = new Builder().forBrowser('chrome').usingServer(webDriverServer).bui
         currentFirstPost = await (await driver.findElement(By.css('.postListInfoWrap a'))).getAttribute('href')
         if(currentFirstPost === firstItem) return
         else{
-            firstItem = currentFirstPost
             webhook(`[NEWPOST] 새로운글: ${await (await driver.findElement(By.css('.cCard .txtBody'))).getText()}\nLINK: ${currentFirstPost}`)
-            await (await driver.findElement(By.className('-comment'))).click()
-            await driver.wait(until.elementLocated(By.className('commentWrite')))
-            await driver.findElement(By.className('commentWrite')).sendKeys(replyTxt)
-            await (await driver.findElement(By.className('submitWrap'))).click()
-            webhook(`[SUCCESS] ${onSuccess}`)
+            await driver.executeScript("document.querySelector('.-comment').click()")
+
+            setTimeout(async()=> {
+                await driver.findElement(By.className('commentWrite')).sendKeys(replyTxt)
+                await driver.wait(until.elementLocated(By.css('.writeSubmit.-active')))
+                await driver.executeScript("document.querySelector('.writeSubmit.-active').click()")
+            .then(()=> {
+                webhook(`[SUCCESS] ${onSuccess}`)
+            })
+            .catch((e)=>{
+                console.error(e)
+                webhook(`[ERROR] 에러 발생! 곧 다시 시도합니다.`)
+            })
+            firstItem = currentFirstPost
+            }, 3000);
         }
       });
   } catch(e){
